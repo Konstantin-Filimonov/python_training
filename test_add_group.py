@@ -19,15 +19,32 @@ class TestAddGroup(unittest.TestCase):
 
         self.open_home_page(driver)
 
-        self.login(driver)
+        self.login(driver, "admin", "secret")
 
         self.open_groupe_page(driver)
 
-        self.create_group(driver)
+        self.create_group(driver, "adad", "adada", "adada")
 
         self.return_to_groups_page(driver)
 
         self.logout(driver)
+
+    def test_add_empty_group(self):
+        driver = self.driver
+
+        self.open_home_page(driver)
+
+        self.login(driver, "admin", "secret")
+
+        self.open_groupe_page(driver)
+
+        self.create_group(driver, "", "", "")
+
+        self.return_to_groups_page(driver)
+
+        self.logout(driver)
+
+
 
     def logout(self, driver):
         driver.find_element(By.LINK_TEXT, "Logout").click()
@@ -35,27 +52,27 @@ class TestAddGroup(unittest.TestCase):
     def return_to_groups_page(self, driver):
         driver.find_element(By.LINK_TEXT, "groups").click()
 
-    def create_group(self, driver):
+    def create_group(self, driver, name, header, footer):
         # init group creation
         driver.find_element(By.NAME, "new").click()
         # fill group form
         driver.find_element(By.NAME, "group_name").clear()
-        driver.find_element(By.NAME, "group_name").send_keys("adad")
+        driver.find_element(By.NAME, "group_name").send_keys(name)
         driver.find_element(By.NAME, "group_header").clear()
-        driver.find_element(By.NAME, "group_header").send_keys("adada")
+        driver.find_element(By.NAME, "group_header").send_keys(header)
         driver.find_element(By.NAME, "group_footer").clear()
-        driver.find_element(By.NAME, "group_footer").send_keys("adada")
+        driver.find_element(By.NAME, "group_footer").send_keys(footer)
         # submit group creation
         driver.find_element(By.NAME, "submit").click()
 
     def open_groupe_page(self, driver):
         driver.find_element(By.LINK_TEXT, "groups").click()
 
-    def login(self, driver):
+    def login(self, driver, username, password):
         driver.find_element(By.NAME, "user").clear()
-        driver.find_element(By.NAME, "user").send_keys("admin")
+        driver.find_element(By.NAME, "user").send_keys(username)
         driver.find_element(By.NAME, "pass").clear()
-        driver.find_element(By.NAME, "pass").send_keys("secret")
+        driver.find_element(By.NAME, "pass").send_keys(password)
         driver.find_element(By.XPATH, "//input[@value='Login']").click()
 
     def open_home_page(self, driver):

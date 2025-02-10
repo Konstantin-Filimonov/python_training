@@ -1,59 +1,52 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import NoAlertPresentException
-import unittest, time, re
+from selenium.webdriver.chrome.service import Service
+import unittest
 
-class UntitledTestCase(unittest.TestCase):
+
+class TestAddGroup(unittest.TestCase):
     def setUp(self):
-        self.wd = webdriver.Chrome(executable_path=r'')
-        self.wd.implicitly_wait(30)
+        service = Service(executable_path=r'C:\chromedriver\chromedriver.exe')
+        self.driver = webdriver.Chrome(service=service)
+        self.driver.implicitly_wait(30)
+        self.base_url = "https://www.google.com/"
+        self.verificationErrors = []
+        self.accept_next_alert = True
 
-    
-    def test_untitled_test_case(self):
-        wd = self.wd
-        wd.get("http://localhost/addressbook/")
-        wd.find_element_by_link_text("groups").click()
-        wd.find_element_by_name("new").click()
-        wd.find_element_by_name("group_name").click()
-        wd.find_element_by_name("group_name").clear()
-        wd.find_element_by_name("group_name").send_keys("asfasgfasf")
-        wd.find_element_by_name("group_header").click()
-        wd.find_element_by_name("group_header").clear()
-        wd.find_element_by_name("group_header").send_keys("asdasd")
-        wd.find_element_by_id("content").click()
-        wd.find_element_by_xpath("//body").click()
-        wd.find_element_by_name("group_name").click()
-        wd.find_element_by_name("group_name").clear()
-        wd.find_element_by_name("group_name").send_keys("dadad")
-        wd.find_element_by_name("group_header").click()
-        wd.find_element_by_name("group_header").clear()
-        wd.find_element_by_name("group_header").send_keys("adadad")
-        wd.find_element_by_name("group_header").clear()
-        wd.find_element_by_name("group_header").send_keys("dadad")
-        wd.find_element_by_name("group_footer").click()
-        wd.find_element_by_name("group_footer").clear()
-        wd.find_element_by_name("group_footer").send_keys("afafaf")
-        wd.find_element_by_name("submit").click()
-        wd.find_element_by_link_text("groups").click()
-        wd.find_element_by_link_text("Logout").click()
-    
-    def is_element_present(self, how, what):
-        try: self.wd.find_element(by=how, value=what)
-        except NoSuchElementException as e: return False
-        return True
-    
-    def is_alert_present(self):
-        try: self.wd.switch_to_alert()
-        except NoAlertPresentException as e: return False
-        return True
-    
+    def test_add_group(self):
+        driver = self.driver
+        driver.get("http://localhost/addressbook/group.php")
+
+        # Логин
+        driver.find_element(By.NAME, "user").clear()
+        driver.find_element(By.NAME, "user").send_keys("admin")
+        driver.find_element(By.NAME, "pass").clear()
+        driver.find_element(By.NAME, "pass").send_keys("secret")
+        driver.find_element(By.XPATH, "//input[@value='Login']").click()
+
+        # Добавление группы
+        driver.find_element(By.LINK_TEXT, "groups").click()
+        driver.find_element(By.NAME, "new").click()
+
+        driver.find_element(By.NAME, "group_name").clear()
+        driver.find_element(By.NAME, "group_name").send_keys("adad")
+        driver.find_element(By.NAME, "group_header").clear()
+        driver.find_element(By.NAME, "group_header").send_keys("adada")
+        driver.find_element(By.NAME, "group_footer").clear()
+        driver.find_element(By.NAME, "group_footer").send_keys("adada")
+
+        # Сохранение группы
+        driver.find_element(By.NAME, "submit").click()
+
+        # Возврат к списку групп и выход
+        driver.find_element(By.LINK_TEXT, "groups").click()
+        driver.find_element(By.LINK_TEXT, "Logout").click()
 
     def tearDown(self):
-        self.wd.quit()
+        self.driver.quit()
+        self.assertEqual([], self.verificationErrors)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -2,6 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
+from group import Group
 import unittest
 
 
@@ -16,32 +17,20 @@ class TestAddGroup(unittest.TestCase):
 
     def test_add_group(self):
         driver = self.driver
-
         self.open_home_page(driver)
-
         self.login(driver, "admin", "secret")
-
         self.open_groupe_page(driver)
-
-        self.create_group(driver, "adad", "adada", "adada")
-
+        self.create_group(driver, Group(name = "adad", header = "adada", footer = "adada"))
         self.return_to_groups_page(driver)
-
         self.logout(driver)
 
     def test_add_empty_group(self):
         driver = self.driver
-
         self.open_home_page(driver)
-
         self.login(driver, "admin", "secret")
-
         self.open_groupe_page(driver)
-
-        self.create_group(driver, "", "", "")
-
+        self.create_group(driver, Group("", "", ""))
         self.return_to_groups_page(driver)
-
         self.logout(driver)
 
 
@@ -52,16 +41,16 @@ class TestAddGroup(unittest.TestCase):
     def return_to_groups_page(self, driver):
         driver.find_element(By.LINK_TEXT, "groups").click()
 
-    def create_group(self, driver, name, header, footer):
+    def create_group(self, driver, group):
         # init group creation
         driver.find_element(By.NAME, "new").click()
         # fill group form
         driver.find_element(By.NAME, "group_name").clear()
-        driver.find_element(By.NAME, "group_name").send_keys(name)
+        driver.find_element(By.NAME, "group_name").send_keys(group.name)
         driver.find_element(By.NAME, "group_header").clear()
-        driver.find_element(By.NAME, "group_header").send_keys(header)
+        driver.find_element(By.NAME, "group_header").send_keys(group.header)
         driver.find_element(By.NAME, "group_footer").clear()
-        driver.find_element(By.NAME, "group_footer").send_keys(footer)
+        driver.find_element(By.NAME, "group_footer").send_keys(group.footer)
         # submit group creation
         driver.find_element(By.NAME, "submit").click()
 

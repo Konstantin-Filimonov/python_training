@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
 from selenium.webdriver.chrome.service import Service
+from conatct import Contact
 import unittest
 
 
@@ -22,13 +23,14 @@ class UntitledTestCase(unittest.TestCase):
         self.login(driver, "admin", "secret")
         self.init_contact_creation(driver)
         self.add_contact(driver, u"Константин", u"Филимонов", "suspiria", "sibady", "zaozerniya", "89043278923", "10",
-                         "January", "2005")
+                         "January", "2005", "filimonov.kostia28@gmail.com")
         self.logout(driver)
 
     def logout(self, driver):
         driver.find_element(By.LINK_TEXT, "Logout").click()
 
-    def add_contact(self, driver, first_name, last_name, nickname, organization, address, mobile, date, month, year):
+    def add_contact(self, driver, first_name, last_name, nickname, organization, address, mobile, date, month, year,
+                    email):
         # fill contact form
         driver.find_element(By.NAME, "firstname").click()
         driver.find_element(By.NAME, "firstname").clear()
@@ -50,7 +52,7 @@ class UntitledTestCase(unittest.TestCase):
         driver.find_element(By.NAME, "mobile").send_keys(mobile)
         driver.find_element(By.NAME, "email").click()
         driver.find_element(By.NAME, "email").clear()
-        driver.find_element(By.NAME, "email").send_keys("filimonov.kostia28@gmail.com")
+        driver.find_element(By.NAME, "email").send_keys(email)
         Select(driver.find_element(By.NAME, "bday")).select_by_visible_text(date)
         Select(driver.find_element(By.NAME, "bmonth")).select_by_visible_text(month)
         driver.find_element(By.NAME, "byear").click()
@@ -108,4 +110,3 @@ class UntitledTestCase(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -19,21 +19,14 @@ class TestAddGroup(unittest.TestCase):
         driver = self.driver
         self.open_home_page(driver)
         self.login(driver, "admin", "secret")
-        self.open_groupe_page(driver)
         self.create_group(driver, Group(name = "adad", header = "adada", footer = "adada"))
-        self.return_to_groups_page(driver)
         self.logout(driver)
 
     def test_add_empty_group(self):
         driver = self.driver
-        self.open_home_page(driver)
         self.login(driver, "admin", "secret")
-        self.open_groupe_page(driver)
         self.create_group(driver, Group("", "", ""))
-        self.return_to_groups_page(driver)
         self.logout(driver)
-
-
 
     def logout(self, driver):
         driver.find_element(By.LINK_TEXT, "Logout").click()
@@ -42,6 +35,7 @@ class TestAddGroup(unittest.TestCase):
         driver.find_element(By.LINK_TEXT, "groups").click()
 
     def create_group(self, driver, group):
+        self.open_groupe_page(driver)
         # init group creation
         driver.find_element(By.NAME, "new").click()
         # fill group form
@@ -53,11 +47,13 @@ class TestAddGroup(unittest.TestCase):
         driver.find_element(By.NAME, "group_footer").send_keys(group.footer)
         # submit group creation
         driver.find_element(By.NAME, "submit").click()
+        self.return_to_groups_page(driver)
 
     def open_groupe_page(self, driver):
         driver.find_element(By.LINK_TEXT, "groups").click()
 
     def login(self, driver, username, password):
+        self.open_home_page(driver)
         driver.find_element(By.NAME, "user").clear()
         driver.find_element(By.NAME, "user").send_keys(username)
         driver.find_element(By.NAME, "pass").clear()

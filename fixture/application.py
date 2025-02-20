@@ -1,6 +1,9 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from fixture.session import SessionHelper
+
+from fixture.session import SessionHelper
 
 
 class Application:
@@ -12,10 +15,8 @@ class Application:
         self.base_url = "https://www.google.com/"
         self.verificationErrors = []
         self.accept_next_alert = True
+        self.session = SessionHelper(self)
 
-    def logout(self):
-        driver = self.driver
-        driver.find_element(By.LINK_TEXT, "Logout").click()
 
     def return_to_groups_page(self):
         driver = self.driver
@@ -40,15 +41,6 @@ class Application:
     def open_groupe_page(self):
         driver = self.driver
         driver.find_element(By.LINK_TEXT, "groups").click()
-
-    def login(self, username, password):
-        driver = self.driver
-        self.open_home_page()
-        driver.find_element(By.NAME, "user").clear()
-        driver.find_element(By.NAME, "user").send_keys(username)
-        driver.find_element(By.NAME, "pass").clear()
-        driver.find_element(By.NAME, "pass").send_keys(password)
-        driver.find_element(By.XPATH, "//input[@value='Login']").click()
 
     def open_home_page(self):
         driver = self.driver

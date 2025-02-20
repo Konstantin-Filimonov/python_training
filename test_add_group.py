@@ -16,26 +16,26 @@ class TestAddGroup(unittest.TestCase):
         self.accept_next_alert = True
 
     def test_add_group(self):
-        driver = self.driver
-        self.open_home_page(driver)
-        self.login(driver, "admin", "secret")
-        self.create_group(driver, Group(name = "adad", header = "adada", footer = "adada"))
-        self.logout(driver)
+        self.login("admin", "secret")
+        self.create_group(Group(name = "adad", header = "adada", footer = "adada"))
+        self.logout()
 
     def test_add_empty_group(self):
-        driver = self.driver
-        self.login(driver, "admin", "secret")
-        self.create_group(driver, Group("", "", ""))
-        self.logout(driver)
+        self.login("admin", "secret")
+        self.create_group(Group("", "", ""))
+        self.logout()
 
-    def logout(self, driver):
+    def logout(self):
+        driver = self.driver
         driver.find_element(By.LINK_TEXT, "Logout").click()
 
-    def return_to_groups_page(self, driver):
+    def return_to_groups_page(self):
+        driver = self.driver
         driver.find_element(By.LINK_TEXT, "groups").click()
 
-    def create_group(self, driver, group):
-        self.open_groupe_page(driver)
+    def create_group(self, group):
+        driver = self.driver
+        self.open_groupe_page()
         # init group creation
         driver.find_element(By.NAME, "new").click()
         # fill group form
@@ -47,20 +47,23 @@ class TestAddGroup(unittest.TestCase):
         driver.find_element(By.NAME, "group_footer").send_keys(group.footer)
         # submit group creation
         driver.find_element(By.NAME, "submit").click()
-        self.return_to_groups_page(driver)
+        self.return_to_groups_page()
 
-    def open_groupe_page(self, driver):
+    def open_groupe_page(self):
+        driver = self.driver
         driver.find_element(By.LINK_TEXT, "groups").click()
 
-    def login(self, driver, username, password):
-        self.open_home_page(driver)
+    def login(self, username, password):
+        driver = self.driver
+        self.open_home_page()
         driver.find_element(By.NAME, "user").clear()
         driver.find_element(By.NAME, "user").send_keys(username)
         driver.find_element(By.NAME, "pass").clear()
         driver.find_element(By.NAME, "pass").send_keys(password)
         driver.find_element(By.XPATH, "//input[@value='Login']").click()
 
-    def open_home_page(self, driver):
+    def open_home_page(self):
+        driver = self.driver
         driver.get("http://localhost/addressbook/group.php")
 
     def tearDown(self):

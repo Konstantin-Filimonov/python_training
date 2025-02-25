@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
 import pytest
-from applicationcont import Application
+from fixture.applicationcont import Application
 
 @pytest.fixture
 def app(request):
@@ -14,7 +14,6 @@ def test_untitled_test_case(app):
     app.add_contact(u"Константин", u"Филимонов", "suspiria", "sibady", "zaozerniya", "89043278923", "10",
                          "January", "2005", "filimonov.kostia28@gmail.com")
     app.logout()
-
 
 def is_element_present(self, how, what):
     try:

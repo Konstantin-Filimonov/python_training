@@ -11,7 +11,7 @@ def app(request):
 
 def test_untitled_test_case(app):
     app.session.login("admin", "secret")
-    app.add_contact(u"Константин", u"Филимонов", "suspiria", "sibady", "zaozerniya", "89043278923", "10",
+    app.contact.add(u"Константин", u"Филимонов", "suspiria", "sibady", "zaozerniya", "89043278923", "10",
                          "January", "2005", "filimonov.kostia28@gmail.com")
     app.session.logout()
 

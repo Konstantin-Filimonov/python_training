@@ -19,9 +19,7 @@ class UntitledTestCase(unittest.TestCase):
 
     def test_untitled_test_case(self):
         driver = self.driver
-        self.open_home_page(driver)
         self.login(driver, "admin", "secret")
-        self.init_contact_creation(driver)
         self.add_contact(driver, u"Константин", u"Филимонов", "suspiria", "sibady", "zaozerniya", "89043278923", "10",
                          "January", "2005", "filimonov.kostia28@gmail.com")
         self.logout(driver)
@@ -31,6 +29,7 @@ class UntitledTestCase(unittest.TestCase):
 
     def add_contact(self, driver, first_name, last_name, nickname, organization, address, mobile, date, month, year,
                     email):
+        self.init_contact_creation(driver)
         # fill contact form
         driver.find_element(By.NAME, "firstname").click()
         driver.find_element(By.NAME, "firstname").clear()
@@ -66,6 +65,7 @@ class UntitledTestCase(unittest.TestCase):
         driver.find_element(By.LINK_TEXT, "add new").click()
 
     def login(self, driver, username, password):
+        self.open_home_page(driver)
         driver.find_element(By.NAME, "user").click()
         driver.find_element(By.NAME, "user").clear()
         driver.find_element(By.NAME, "user").send_keys(username)

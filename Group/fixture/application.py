@@ -1,8 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from fixture.group import GroupHelper
-from fixture.session import SessionHelper
+from Group.fixture.group import GroupHelper
+from Group.fixture.session import SessionHelper
 
 class Application:
 

@@ -10,10 +10,10 @@ def app(request):
     return fixture
 
 def test_untitled_test_case(app):
-    app.login("admin", "secret")
+    app.session.login("admin", "secret")
     app.add_contact(u"Константин", u"Филимонов", "suspiria", "sibady", "zaozerniya", "89043278923", "10",
                          "January", "2005", "filimonov.kostia28@gmail.com")
-    app.logout()
+    app.session.logout()
 
 def is_element_present(self, how, what):
     try:

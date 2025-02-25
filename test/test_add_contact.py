@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
-import pytest
-from fixture.applicationcont import Application
-
-@pytest.fixture
-def app(request):
-    fixture = Application()
-    request.addfinalizer(fixture.destroy)
-    return fixture
 
 def test_untitled_test_case(app):
     app.session.login("admin", "secret")

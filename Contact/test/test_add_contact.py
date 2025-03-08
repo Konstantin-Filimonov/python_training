@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from selenium.common.exceptions import NoSuchElementException, NoAlertPresentException
+from Contact.model.contact import Contact
 
 def test_add_contact(app):
-    app.session.login(username="admin", password= "secret")
-    app.contact.add(firstname=u"Константин", lastname=u"Филимонов", nickname="suspiria", company="sibady", home="zaozerniya", mobile="89043278923", bday="10",
-                         bmonth="January", byear="2005", email="filimonov.kostia28@gmail.com")
-    app.session.logout()
+    app.contact.add(Contact(first_name=u"Константин", last_name=u"Филимонов", nickname="suspiria", organization="sibady", address="zaozerniya", mobile="89043278923", date="10",
+                         month="January", year="2005", email="filimonov.kostia28@gmail.com"))
 
 def is_element_present(self, how, what):
     try:

@@ -17,6 +17,13 @@ class Application:
         self.session = SessionHelper(self)
         self.contact = ContactHelper(self)
 
+    def is_valid(self):
+        try:
+            self.driver.current_url
+            return True
+        except:
+            return False
+
     def setUp(self):
         service = Service(executable_path=r'C:\chromedriver\chromedriver.exe')
         self.driver = webdriver.Chrome(service=service)

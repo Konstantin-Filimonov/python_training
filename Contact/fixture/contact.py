@@ -23,8 +23,13 @@ class ContactHelper:
         self.change_field_value("home", contact.address)
         self.change_field_value("mobile", contact.mobile)
         self.change_field_value("email", contact.email)
-        self.change_field_value("bday", contact.date)
-        self.change_field_value("bmonth", contact.month)
+
+        select = Select(driver.find_element(By.NAME, "bday"))
+        select.select_by_visible_text("10")
+
+        select = Select(driver.find_element(By.NAME, "bmonth"))
+        select.select_by_visible_text("January")
+
         self.change_field_value("byear", contact.year)
 
     def change_field_value(self, field_name, text):
@@ -32,7 +37,7 @@ class ContactHelper:
         if text is not None:
             driver.find_element(By.NAME, field_name).click()
             driver.find_element(By.NAME, field_name).clear()
-            driver.find_element(By.NAME, field_name).send_keys(u"%s" % text)
+            driver.find_element(By.NAME, field_name).send_keys(text)
 
     def delete_first_contact(self):
         driver = self.app.driver

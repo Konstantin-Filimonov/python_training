@@ -7,46 +7,50 @@ class ContactHelper:
     def __init__(self, app):
         self.app = app
 
-    def add(self, first_name, last_name, nickname, organization, address, mobile, date, month, year,
-            email):
+    def add(self, contact):
         driver = self.app.driver
         self.init_contact_creation()
-        # fill contact form
-        driver.find_element(By.NAME, "firstname").click()
-        driver.find_element(By.NAME, "firstname").clear()
-        driver.find_element(By.NAME, "firstname").send_keys(u"%s" % first_name)
-        driver.find_element(By.NAME, "lastname").click()
-        driver.find_element(By.NAME, "lastname").clear()
-        driver.find_element(By.NAME, "lastname").send_keys(u"%s" % last_name)
-        driver.find_element(By.NAME, "nickname").click()
-        driver.find_element(By.NAME, "nickname").clear()
-        driver.find_element(By.NAME, "nickname").send_keys(nickname)
-        driver.find_element(By.NAME, "company").click()
-        driver.find_element(By.NAME, "company").clear()
-        driver.find_element(By.NAME, "company").send_keys(organization)
-        driver.find_element(By.NAME, "home").click()
-        driver.find_element(By.NAME, "home").clear()
-        driver.find_element(By.NAME, "home").send_keys(address)
-        driver.find_element(By.NAME, "mobile").click()
-        driver.find_element(By.NAME, "mobile").clear()
-        driver.find_element(By.NAME, "mobile").send_keys(mobile)
-        driver.find_element(By.NAME, "email").click()
-        driver.find_element(By.NAME, "email").clear()
-        driver.find_element(By.NAME, "email").send_keys(email)
-        Select(driver.find_element(By.NAME, "bday")).select_by_visible_text(date)
-        Select(driver.find_element(By.NAME, "bmonth")).select_by_visible_text(month)
-        driver.find_element(By.NAME, "byear").click()
-        driver.find_element(By.NAME, "byear").clear()
-        driver.find_element(By.NAME, "byear").send_keys(year)
-        driver.find_element(By.NAME, "new_group").click()
+        self.fill_contact_form(contact)
         # submit creation contact
         driver.find_element(By.XPATH, "//div[@id='content']/form/input[20]").click()
 
+    def fill_contact_form(self, contact):
+        driver = self.app.driver
+        self.change_field_value("firstname", contact.first_name)
+        self.change_field_value("lastname", contact.last_name)
+        self.change_field_value("nickname", contact.nickname)
+        self.change_field_value("company", contact.organization)
+        self.change_field_value("home", contact.address)
+        self.change_field_value("mobile", contact.mobile)
+        self.change_field_value("email", contact.email)
+        self.change_field_value("bday", contact.date)
+        self.change_field_value("bmonth", contact.month)
+        self.change_field_value("byear", contact.year)
+
+    def change_field_value(self, field_name, text):
+        driver = self.app.driver
+        if text is not None:
+            driver.find_element(By.NAME, field_name).click()
+            driver.find_element(By.NAME, field_name).clear()
+            driver.find_element(By.NAME, field_name).send_keys(u"%s" % text)
+
     def delete_first_contact(self):
         driver = self.app.driver
-        driver.find_element(By.NAME, "selected[]").click()
+        self.select_first_contact()
         driver.find_element(By.XPATH, "// *[ @ id = 'content'] / form[2] / div[2] / input").click()
 
+    def select_first_contact(self):
+        driver = self.app.driver
+        driver.find_element(By.NAME, "selected[]").click()
+
+    def modify_first_contact(self, new_contact_data):
+        driver = self.app.driver
+        # open modification form
+        driver.find_element(By.XPATH, "//img[@alt='Edit']").click()
+        # fill contact form
+        self.fill_contact_form(new_contact_data)
+        # submit modification
+        driver.find_element(By.NAME, "update").click()
 
     def init_contact_creation(self):
         driver = self.app.driver

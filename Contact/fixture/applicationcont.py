@@ -1,8 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from Contact.fixture.contact import ContactHelper
-from Contact.fixture import SessionHelper
-
+from Contact.fixture.session import SessionHelper
 from Group.fixture.session import SessionHelper
 
 

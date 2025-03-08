@@ -1,5 +1,5 @@
 import pytest
-from Contact.fixture import Application
+from Contact.fixture.applicationcont import Application
 
 
 @pytest.fixture(scope = "session")

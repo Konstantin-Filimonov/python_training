@@ -61,3 +61,6 @@ class ContactHelper:
         driver = self.app.driver
         driver.find_element(By.LINK_TEXT, "add new").click()
 
+    def count(self):
+        driver = self.app.driver
+        return len(driver.find_elements(By.NAME, "selected[]"))

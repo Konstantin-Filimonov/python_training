@@ -32,7 +32,7 @@ class SessionHelper:
 
     def is_logged_in_as(self, username):
         driver = self.app.driver
-        return driver.find_element(By.XPATH, "xpath=//div[@id='top']/form/b").text == "("+username+")"
+        return driver.find_element(By.XPATH, "//div[@id='top']/form/b").text == "("+username+")"
 
     def ensure_login(self, username, password):
         driver = self.app.driver

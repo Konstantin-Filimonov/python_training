@@ -10,7 +10,7 @@ class Application:
     def __init__(self):
         service = Service(executable_path=r'C:\chromedriver\chromedriver.exe')
         self.driver = webdriver.Chrome(service=service)
-        self.driver.implicitly_wait(30)
+        self.driver.implicitly_wait(5)
         self.base_url = "https://www.google.com/"
         self.verificationErrors = []
         self.accept_next_alert = True

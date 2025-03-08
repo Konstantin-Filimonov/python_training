@@ -11,6 +11,7 @@ class Application:
         self.base_url = "https://www.google.com/"
         self.verificationErrors = []
         self.accept_next_alert = True
+        self.driver.implicitly_wait(5)
         self.session = SessionHelper(self)
         self.group = GroupHelper(self)
 

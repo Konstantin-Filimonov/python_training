@@ -35,5 +35,8 @@ class Application:
     def open_home_page(self):
         self.driver.get("http://localhost/addressbook/")
 
+    def open_php_my_admin(self):
+        self.driver.get("http://localhost/phpmyadmin/index.php?route=/sql&db=addressbook&table=addressbook&pos=0")
+
     def destroy(self):
         self.driver.quit()

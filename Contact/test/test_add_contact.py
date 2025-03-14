@@ -3,8 +3,12 @@ from selenium.common.exceptions import NoSuchElementException, NoAlertPresentExc
 from Contact.model.contact import Contact
 
 def test_add_contact(app):
+    old_contacts = app.contact.get_contact_list()
     app.contact.add(Contact(first_name=u"Константин", last_name=u"Филимонов", nickname="suspiria", organization="sibady", address="zaozerniya", mobile="89043278923", date="10",
                          month="January", year="2005", email="filimonov.kostia28@gmail.com"))
+    new_contacts = app.contact.get_contact_list()
+    assert len(old_contacts) + 1 == len(new_contacts)
+
 
 def is_element_present(self, how, what):
     try:

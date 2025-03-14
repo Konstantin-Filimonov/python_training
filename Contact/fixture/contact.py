@@ -1,5 +1,7 @@
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
+from ..model.contact import Contact
 
 
 class ContactHelper:
@@ -13,6 +15,10 @@ class ContactHelper:
         self.fill_contact_form(contact)
         # submit creation contact
         driver.find_element(By.XPATH, "//div[@id='content']/form/input[20]").click()
+
+    def return_to_contact_page(self):
+        driver = self.app.driver
+        driver.find_element(By.LINK_TEXT, "home").click()
 
     def fill_contact_form(self, contact):
         driver = self.app.driver
@@ -56,11 +62,27 @@ class ContactHelper:
         self.fill_contact_form(new_contact_data)
         # submit modification
         driver.find_element(By.NAME, "update").click()
+        self.return_to_contact_page()
 
     def init_contact_creation(self):
         driver = self.app.driver
         driver.find_element(By.LINK_TEXT, "add new").click()
 
+    def open_contact_page(self):
+        driver = self.app.driver
+        driver.find_element(By.LINK_TEXT, "home").click()
+
     def count(self):
         driver = self.app.driver
         return len(driver.find_elements(By.NAME, "selected[]"))
+
+    def get_contact_list(self):
+        driver = self.app.driver
+        self.open_contact_page()
+        contacts = []
+        for element in driver.find_elements(By.CSS_SELECTOR, "[name=entry]"):
+            text = element.text
+            id = element.find_element(By.NAME, "selected[]").get_attribute("value")
+            contacts.append(Contact(first_name=text, id=id))
+        return contacts
+

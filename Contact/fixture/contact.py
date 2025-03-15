@@ -81,8 +81,10 @@ class ContactHelper:
         self.open_contact_page()
         contacts = []
         for element in driver.find_elements(By.CSS_SELECTOR, "[name=entry]"):
-            text = element.text
+            first_name = element.find_element(By.XPATH,
+                                              ".//td[3]").text  # Измените индекс в зависимости от вашей структуры таблицы
+            last_name = element.find_element(By.XPATH,
+                                             ".//td[2]").text  # Измените индекс в зависимости от вашей структуры таблицы
             id = element.find_element(By.NAME, "selected[]").get_attribute("value")
-            contacts.append(Contact(first_name=text, id=id))
+            contacts.append(Contact(first_name=first_name, last_name=last_name, id=id))
         return contacts
-

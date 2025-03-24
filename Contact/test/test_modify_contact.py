@@ -17,7 +17,7 @@ from random import randrange
 
 def test_modify_contact_name(app):
     old_contacts = app.contact.get_contact_list()
-    contact = Contact(first_name ="blabla")
+    contact = Contact(first_name="blabla", last_name=old_contacts[0].last_name)
     contact.id = old_contacts[0].id
     app.contact.modify_first_contact(contact)
     new_contacts = app.contact.get_contact_list()

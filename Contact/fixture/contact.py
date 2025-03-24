@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from ..model.contact import Contact
-
+import re
 
 class ContactHelper:
 
@@ -27,18 +27,8 @@ class ContactHelper:
         self.change_field_value("firstname", contact.first_name)
         self.change_field_value("lastname", contact.last_name)
         self.change_field_value("nickname", contact.nickname)
-        self.change_field_value("company", contact.organization)
-        self.change_field_value("home", contact.address)
+        self.change_field_value("home", contact.homephone)
         self.change_field_value("mobile", contact.mobile)
-        self.change_field_value("email", contact.email)
-
-        select = Select(driver.find_element(By.NAME, "bday"))
-        select.select_by_visible_text("10")
-
-        select = Select(driver.find_element(By.NAME, "bmonth"))
-        select.select_by_visible_text("January")
-
-        self.change_field_value("byear", contact.year)
 
     def change_field_value(self, field_name, text):
         driver = self.app.driver
@@ -103,12 +93,59 @@ class ContactHelper:
 
     def get_contact_list(self):
         if self.contact_cache is None:
-            self.contact_cache = []  # Инициализируем contact_cache как пустой список
             driver = self.app.driver
             self.open_contact_page()
-            for element in driver.find_elements(By.CSS_SELECTOR, "[name=entry]"):
-                first_name = element.find_element(By.XPATH, ".//td[3]").text
-                last_name = element.find_element(By.XPATH, ".//td[2]").text
-                id = element.find_element(By.NAME, "selected[]").get_attribute("value")
-                self.contact_cache.append(Contact(first_name=first_name, last_name=last_name, id=id))
+            self.contact_cache = []
+            for row in driver.find_elements(By.NAME, "entry"):
+                cells = row.find_elements(By.TAG_NAME, "td")
+                last_name = cells[1].text
+                first_name = cells[2].text
+                id = cells[0].find_element(By.TAG_NAME, "input").get_attribute("value")
+                all_phones = cells[5].text.splitlines()
+                self.contact_cache.append(
+                    Contact(
+                        first_name=first_name,
+                        last_name=last_name,
+                        id=id,
+                        homephone=all_phones[0],
+                        mobile=all_phones[1]
+                    )
+                )
         return list(self.contact_cache)
+
+    def open_home_page(self):
+        driver = self.app.driver
+        if not (driver.current_url.endswith("/")):
+            driver.find_element(By.LINK_TEXT, "home").click()
+
+    def open_contact_to_edit_by_index(self, index):
+        driver = self.app.driver
+        self.app.open_home_page()
+        row = driver.find_elements(By.NAME, "entry")[index]
+        cell = row.find_elements(By.TAG_NAME, "td")[7]
+        cell.find_element(By.TAG_NAME, "a").click()
+
+    def open_contact_view_by_index(self, index):
+        driver = self.app.driver
+        self.app.open_home_page()
+        row = driver.find_elements(By.NAME, "entry")[index]
+        cell = row.find_elements(By.TAG_NAME, "td")[6]
+        cell.find_element(By.TAG_NAME, "a").click()
+
+    def get_contact_info_from_edit_page(self, index):
+        driver = self.app.driver
+        self.open_contact_to_edit_by_index(index)
+        firstname = driver.find_element(By.NAME, "firstname").get_attribute("value")
+        lastname = driver.find_element(By.NAME, "lastname").get_attribute("value")
+        id = driver.find_element(By.NAME, "id").get_attribute("value")
+        homephone = driver.find_element(By.NAME, "home").get_attribute("value")
+        mobile = driver.find_element(By.NAME, "mobile").get_attribute("value")
+        return Contact(first_name=firstname, last_name=lastname, id=id, homephone = homephone, mobile=mobile)
+
+    def get_contact_from_view_page(self, index):
+        driver = self.app.driver
+        self.open_contact_view_by_index(index)
+        text = driver.find_element(By.ID, "content").text
+        homephone = re.search("H: (.*)", text).group(1)
+        mobile = re.search("M: (.*)", text).group(1)
+        return Contact(homephone = homephone, mobile=mobile)

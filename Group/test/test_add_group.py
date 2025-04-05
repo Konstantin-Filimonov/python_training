@@ -14,7 +14,6 @@ testdata = [
         for i in range(5)
 ]
 
-
 @pytest.mark.parametrize("group", testdata, ids=[repr(x) for x in testdata])
 
 def test_add_group(app, group):
